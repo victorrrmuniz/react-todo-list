@@ -3,7 +3,7 @@ import logo from './../../assets/logo.svg';
 import plusImage from './../../assets/plus.svg';
 import clipboardImage from './../../assets/clipboard.svg';
 import trashImage from './../../assets/trash.svg';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 
 interface Todo {
     id: number;
@@ -17,24 +17,39 @@ export function TodoList() {
     const [completedTasks, setCompletedTasks] = useState(0);
     const [createdTasks, setCreatedTasks] = useState(0);
     const [newTask, setNewTask] = useState('');
+    const [error, setError] = useState('');
 
     function handleCreateTask() {
-        const newTaskItem: Todo = {
-            id: todoList.length,
-            todo: newTask,
-            completed: false
-        };
-
-        setTodoList([...todoList, newTaskItem]);
-        setNewTask('');
-        setCreatedTasks(todoList.length + 1);
+        if (newTask.length > 0) {
+            const newTaskItem: Todo = {
+                id: todoList.length,
+                todo: newTask,
+                completed: false
+            };
+    
+            setTodoList([...todoList, newTaskItem]);
+            setNewTask('');
+            setCreatedTasks(todoList.length + 1);
+            setError('');
+        } else {
+            setError('O campo é obrigatório');
+        }
     }
 
     function handleCheckTask(event: ChangeEvent<HTMLInputElement>, id: number) {
         const updatedTodoList: Todo[] = todoList.map((todo) => {
             return todo.id === id ? { ...todo, completed: event.target.checked } : todo
         });
+
+        setCompletedTasks(updatedTodoList.filter(todo => todo.completed).length);
         setTodoList(updatedTodoList);
+    }
+
+    function handleDeleteTask(id: number) {
+        var updateTodoList = todoList.filter(todo => todo.id !== id);
+        setTodoList(updateTodoList);
+        setCreatedTasks(updateTodoList.length);
+        setCompletedTasks(updateTodoList.filter(todo => todo.completed).length);
     }
 
     return (
@@ -54,7 +69,11 @@ export function TodoList() {
                     <span>Criar</span>
                     <img src={plusImage} alt="" />
                 </button>
+
+                <div className={styles.messageError}>{error}</div>
             </div>
+
+            
 
             <div className={styles.listContainer}>
                 <div className={styles.headerContainer}>
@@ -64,7 +83,12 @@ export function TodoList() {
                     </div>
                     <div>
                         <span>Concluídas</span>
-                        <span>{completedTasks}</span>
+                        <span>
+                            {completedTasks}
+                            {
+                                createdTasks > 0 && <> de {createdTasks}</>
+                            }
+                        </span>
                     </div>
                 </div>
 
@@ -79,7 +103,7 @@ export function TodoList() {
                                             <input type="checkbox" onChange={(event) => handleCheckTask(event, item.id)} />
                                             <p className={item.completed ? styles.completed : ''}>{item.todo}</p>
                                         </span>
-                                        <span>
+                                        <span onClick={() => handleDeleteTask(item.id)}>
                                             <img src={trashImage} alt="" />
                                         </span>
                                     </div>

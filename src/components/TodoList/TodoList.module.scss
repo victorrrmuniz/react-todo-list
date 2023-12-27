@@ -17,6 +17,7 @@
 
 
     .formContainer {
+        position: relative;
         height: 54px;
 
         display: flex;
@@ -54,7 +55,17 @@
         input, button {
             border: 1px solid var(--black)
         }
+
+        .messageError {
+            font-size: 0.875rem;
+            position: absolute;
+            top: 58px;
+            left: 35%;
+            color: var(--danger);
+        }
     }
+
+    
 
     .listContainer {
         margin-top: 48px;
