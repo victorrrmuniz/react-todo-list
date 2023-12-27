@@ -76,7 +76,7 @@
                 gap: 12px;
 
                 span {
-                    font-weight: bold;
+                    font-weight: bold;   
                 }
 
                 span:nth-child(2) {
@@ -99,7 +99,7 @@
         .listContainer {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 12px;
 
             .todoContainer {
                 display: flex;
@@ -108,7 +108,7 @@
                 justify-content: space-between;
                 background-color: var(--gray-500);
                 padding: 20px 32px;
-                border: 1px solid var(--gray-400);
+                border: 1px solid var(--gray-300);
                 border-radius: 8px;
 
 
@@ -157,6 +157,10 @@
                     
                     p {
                         color: var(--gray-100);
+                        &.completed {
+                            color: var(--gray-300);
+                            text-decoration: line-through;
+                        }
                     }
                 }
 
